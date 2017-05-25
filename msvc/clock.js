@@ -27,7 +27,7 @@ class Clock {
         }
 
         dateSplit = date.toLocaleDateString(dateFormat, optionsDate).split('/');
-        hour12_24 = (0 === date.getHours() % hMode && !format) ? hour12_24 = 12 : ("0" + date.getHours() % hMode).slice(-2);
+        hour12_24 = (0 === date.getHours() % hMode && !format) ? 12 : ("0" + date.getHours() % hMode).slice(-2);
 
         var timeDate = {
             hour: hour12_24,
