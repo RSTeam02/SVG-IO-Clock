@@ -14,7 +14,4 @@ class SVGDec extends SVGLed{
         $("#ledDisplay").append(txt);
         super.onOffState(ledObj.id, ledObj.onState);
     }
-
-
-
 }

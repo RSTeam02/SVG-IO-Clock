@@ -7,25 +7,38 @@ class Clock {
         var optionsDate = {
             year: "2-digit", month: "2-digit", day: "2-digit"
         };
-        var timeDateStr;
-        var timePart, datePart, apm;
+
+        var dateSplit = [];
+        var apm = "";
         var date = new Date();
+        var dateFormat = "";
+        var hMode = 0;
+        var hour12_24 = "";
 
         if (format) {
-            document.getElementById("ampm").innerHTML = "AM/PM";
-            timePart = date.toLocaleTimeString('en-GB').split(':');
-            datePart = date.toLocaleDateString('en-GB', optionsDate).split('/');
+            hMode = 24;
+            dateFormat = "en-GB";
+            $("#ampm").html("AM/PM");
         } else {
+            hMode = 12;
+            dateFormat = "en-US";
             apm = date.toLocaleTimeString('en-US').slice(8, 11);
-            document.getElementById("ampm").innerHTML = apm;
-            timePart = date.toLocaleTimeString('en-US').slice(0, -3).split(':');
-            timePart = [("0" + timePart[0]).slice(-2), timePart[1], timePart[2]];
-            datePart = date.toLocaleDateString('en-US', optionsDate).split('/');
+            $("#ampm").html(apm);
         }
-        //join 2 arrays into 1
-        timePart.push.apply(timePart, datePart);
 
-        cb(timePart);
+        dateSplit = date.toLocaleDateString(dateFormat, optionsDate).split('/');
+        hour12_24 = (0 === date.getHours() % hMode && !format) ? hour12_24 = 12 : ("0" + date.getHours() % hMode).slice(-2);
+
+        var timeDate = {
+            hour: hour12_24,
+            min: ("0" + date.getMinutes()).slice(-2),
+            sec: ("0" + date.getSeconds()).slice(-2),
+            day: ("0" + dateSplit[0]).slice(-2),
+            month: ("0" + dateSplit[1]).slice(-2),
+            year: ("0" + dateSplit[2]).slice(-2)
+        };
+
+        cb(timeDate);
     }
- 
+
 }
