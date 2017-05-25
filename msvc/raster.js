@@ -3,27 +3,22 @@
  * View as SVG => dom
  */
 
-class Raster extends BinaryConverter{
+class Raster extends BinaryConverter {
     //raster display decimal or circle dots
-    drawRaster(strategy, binArr = new Array(7)) {
+    drawRaster(strategy, binArr = {}) {
         let y = 0;
-        let ledArr = [];
-        let bin = [];
-        let ledNo = 41;
+        let ledArr = [];       
         let ledObj = {};
-        let binConv = super.convert(binArr);        
-        
-        for (let k = 0; k < binConv.length; k++) {
-            bin[k] = (binConv[k] !== undefined) ? [...binConv[k]] : [..."0000000"];
-        }
+        let binConv = super.convert(binArr);
+        let ledNo = (binConv.length * binConv[0].length) - 1;
 
-        for (let i = 5; i >= 0; i--) {
+        for (let i = binConv.length - 1; i >= 0; i--) {
             ledArr[i] = [];
             let x = 0;
-            for (let j = 0; j < 7; j++) {                
-                    strategy.executeStrategy(ledObj = {
-                        onState: ((bin[i][j] === "1") ? true : false), absX: x, absY: y, id: ledNo
-                    });               
+            for (let j = 0; j < binConv[i].length; j++) {
+                strategy.executeStrategy(ledObj = {
+                    onState: ((binConv[i][j] === "1") ? true : false), absX: x, absY: y, id: ledNo
+                });
                 ledNo--;
                 //next row
                 x += 35;
@@ -31,6 +26,6 @@ class Raster extends BinaryConverter{
             //next column
             y += 85
         }
-    }    
+    }
 
 }
