@@ -22,7 +22,7 @@ class Clock {
         } else {
             hMode = 12;
             dateFormat = "en-US";
-            apm = date.toLocaleTimeString('en-US').slice(8, 11);
+            apm = (date.getHours() >= 0 && date.getHours() < 12) ? "AM" : "PM";
             $("#ampm").html(apm);
         }
 
