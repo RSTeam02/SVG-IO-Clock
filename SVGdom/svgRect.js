@@ -1,4 +1,6 @@
-class SVGRect extends SVGLed{
+import {Led} from './led.js';
+
+export class SVGRect extends Led{
 
     draw(ledObj) {
         let led = document.createElementNS("http://www.w3.org/2000/svg", "rect");
@@ -8,7 +10,7 @@ class SVGRect extends SVGLed{
         $(led).attr("width", 20);
         $(led).attr("height", 30);
         $("#ledDisplay").append(led);
-        super.onOffState(ledObj.id, ledObj.onState);
+        super.onOffState(ledObj);
     }
 
 }

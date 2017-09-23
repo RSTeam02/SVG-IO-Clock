@@ -1,4 +1,6 @@
-class SVGCircle extends SVGLed{
+import {Led} from './led.js';
+
+export class SVGCircle extends Led{
 
 
     draw(ledObj) {
@@ -10,7 +12,7 @@ class SVGCircle extends SVGLed{
         $(led).attr("cy", 40);
         $(led).attr("r", 12);
         $("#ledDisplay").append(led);
-        super.onOffState(ledObj.id, ledObj.onState);
+        super.onOffState(ledObj);
     }
 
 }

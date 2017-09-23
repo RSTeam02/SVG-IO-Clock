@@ -1,4 +1,6 @@
-class SVGDec extends SVGLed{
+import {Led} from './led.js';
+
+export class SVGDec extends Led{
 
     draw(ledObj) {
         let txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
@@ -12,6 +14,6 @@ class SVGDec extends SVGLed{
         $(txt).attr("font-family", "'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif");
         $(txt).attr("font-size", "24px");
         $("#ledDisplay").append(txt);
-        super.onOffState(ledObj.id, ledObj.onState);
+        super.onOffState(ledObj);
     }
 }

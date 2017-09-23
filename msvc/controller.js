@@ -2,9 +2,21 @@
  * @rsTeam02
  * Control unit 
  */
-class Controller {
 
-    constructor() {
+import {Clock} from './clock.js';
+import {SVGTextObj} from '../SVGdom/svgTextObj.js';
+import {SVGStaticObj} from '../SVGdom/svgStaticObj.js';
+import {SVGCircle} from '../SVGdom/svgCircle.js';
+import {SVGDec} from '../SVGdom/svgDec.js';
+import {SVGRect} from '../SVGdom/svgRect.js';
+import {DrawStrategy} from '../strategy/drawStrategy.js';
+import {Raster} from './raster.js';
+
+
+export class Controller {
+
+    constructor() {	
+
         this.shiftClass = document.getElementsByClassName("shiftClass");
         this.colClass = document.getElementsByClassName("colClass");
         for (let i = 0; i < this.colClass.length; i++) {

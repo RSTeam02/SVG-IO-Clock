@@ -1,4 +1,4 @@
-class Clock {
+export class Clock {
 
 
     //switch AM/PM or 24h mode
