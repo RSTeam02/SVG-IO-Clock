@@ -1,6 +1,7 @@
 # SVG IO-Clock
 
 
++ instead of require.js, using native import {} from '../abc.js' command for modular classes, in Firefox experimental => enter in address bar about:config, switch dom.moduleScripts.enabled: true
 + this task is based on SVGSmartUI-Timer, replace stoptimer with clock and change number of units.
 + switch between am/pm, 24h
 + 1 additional digit for year, if year > 63
