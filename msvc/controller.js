@@ -13,10 +13,11 @@ import {DrawStrategy} from '../strategy/drawStrategy.js';
 import {Raster} from './raster.js';
 
 
+
 export class Controller {
 
-    constructor() {	
-
+    constructor(setLS) {
+        this.setLS = setLS;
         this.shiftClass = document.getElementsByClassName("shiftClass");
         this.colClass = document.getElementsByClassName("colClass");
         for (let i = 0; i < this.colClass.length; i++) {
@@ -30,66 +31,107 @@ export class Controller {
         this.op.fill(7.5);
         this.initGradient();
         this.RGBSlider();
-        this.rgbRand(function () { });
+        this.saveListener();
+        this.radioListener();
+        if (this.setLS.loadSetting("ioClkSet") !== null) {
+            $(`#${this.setLS.loadSetting("ioClkSet").shape}`).prop('checked', true);
+            $(`#${this.setLS.loadSetting("ioClkSet").apm}`).prop('checked', true);
+            $("#redInfo").html(`Red: ${this.setLS.loadSetting("ioClkSet").r}`);
+            $("#greenInfo").html(`Green: ${this.setLS.loadSetting("ioClkSet").g}`);
+            $("#blueInfo").html(`Blue: ${this.setLS.loadSetting("ioClkSet").b}`);
+            $("#red").val(this.setLS.loadSetting("ioClkSet").r);
+            $("#green").val(this.setLS.loadSetting("ioClkSet").g);
+            $("#blue").val(this.setLS.loadSetting("ioClkSet").b);
+            $('#shiftR').prop('checked', this.setLS.loadSetting("ioClkSet").checkR);
+            $('#shiftG').prop('checked', this.setLS.loadSetting("ioClkSet").checkG);
+            $('#shiftB').prop('checked', this.setLS.loadSetting("ioClkSet").checkB);
+            this.rgbRand(false, this.setLS.loadSetting("ioClkSet").minMax.split(","));
+        }
         this.model = new Clock();
         this.raster = new Raster();
-        this.textView = new SVGTextObj();           
+        this.textView = new SVGTextObj();
         this.selectStrategy();
-        this.radioListener();      
+
         this.res = 0;
-        setInterval(()=>{
+
+        setInterval(() => {
             this.updateView();
-            this.rgbRand(function () { });
+            this.rgbRand();
         }, 1000)
+
     }
 
+    saveListener() {
+        $(".radioBtnShape, .radioBtnFormat, .shiftClass, .colClass").click(() => {
+            this.setLS.saveSetting("ioClkSet", this.ioClkSet());
+        });
+    }
 
-    radioListener(){     
+    radioListener() {
+
         for (let i = 0; i < this.classRadioShape.length; i++) {
-            $(this.classRadioShape[i]).click(() => { 
+            $(this.classRadioShape[i]).click(() => {
                 this.selectStrategy();
-            });       
-        }   
+            });
+        }
     }
 
-    selectStrategy(){
-        var strategyObj = {
-            dec : new SVGDec(),
-            dot : new SVGCircle(),
-            rect : new SVGRect()
+
+    //assign every ui setting to a json
+    ioClkSet() {
+        let setting = {
+            r: $("#red").val(),
+            g: $("#green").val(),
+            b: $("#blue").val(),
+            apm: $("input:radio[name='apm']:checked").attr("id"),
+            checkR: $('#shiftR').is(':checked'),
+            checkG: $('#shiftG').is(':checked'),
+            checkB: $('#shiftB').is(':checked'),
+            shape: $("input:radio[name='format']:checked").val(),
+            minMax: this.posStr
         }
 
-        for (let i = 0; i < Object.keys(strategyObj).length; i++) {                          
+        return setting;
+    }
+
+    selectStrategy() {
+        var strategyObj = {
+            dec: new SVGDec(),
+            dot: new SVGCircle(),
+            rect: new SVGRect()
+        }
+
+        for (let i = 0; i < Object.keys(strategyObj).length; i++) {
             $.each(strategyObj, (key, val) => {
-                if(key == $("input:radio[name='format']:checked").val()){
-                    this.strategy = new DrawStrategy(val); 
-                }                   
-            });            
+                if (key == $("input:radio[name='format']:checked").val()) {
+                    this.strategy = new DrawStrategy(val);
+                }
+            });
         }
     }
 
     updateView() {
-        this.model.timeDate($('#24h').is(':checked'),(cb) => {
+        this.model.timeDate($('#24h').is(':checked'), (cb) => {
             this.clrSVGDisp();
             this.clrSVGTxt();
-            this.raster.drawRaster(this.strategy, cb);            
+            this.raster.drawRaster(this.strategy, cb);
             this.textView.svgText(cb);
         });
     }
 
-    clrSVGDisp(){    
+    clrSVGDisp() {
         while (ledDisplay.firstChild) {
             ledDisplay.removeChild(ledDisplay.firstChild);
-        }  
-          
+        }
+
     }
 
-    clrSVGTxt(){
+    clrSVGTxt() {
         while (nativeDisplay.firstChild) {
             nativeDisplay.removeChild(nativeDisplay.firstChild);
-        }     
-    }    
-    
+        }
+    }
+
     RGBSlider() {
         for (var i = 0; i < this.colClass.length; i++) {
             this.colClass[i].addEventListener("input", () => {
@@ -117,18 +159,35 @@ export class Controller {
         $("#RadialGradient5").append(this.stop2);
     }
 
-    rgbRand(callback) {
+    /*
+     *load once the slider directions from the ls, 
+     *else alternate from 0 to 255 in 7.5 steps for each rgb component
+     */
+
+    rgbRand(loadedOnce = true, minMax = []) {
         let rgb = new Array(3);
+        let pos = [];
+
         for (var i = 0; i < rgb.length; i++) {
             rgb[i] = parseInt(this.colClass[i].value);
         }
         for (var i = 0; i < this.colClass.length; i++) {
-            if (this.colClass[i].value == 0) {
-                this.op[i] = 7.5;
+            if (!loadedOnce) {
+                if (minMax[i] == 0) {
+                    this.op[i] = 7.5;
+                }
+                if (minMax[i] == 255) {
+                    this.op[i] = -7.5;
+                }
+            } else {
+                if (this.colClass[i].value == 0) {
+                    this.op[i] = 7.5;
+                }
+                if (this.colClass[i].value == 255) {
+                    this.op[i] = -7.5;
+                }
             }
-            if (this.colClass[i].value == 255) {
-                this.op[i] = -7.5;
-            }
+            pos[i] = (this.op[i] > 0) ? 0 : 255;
             rgb[i] += this.op[i];
         }
         for (var i = 0; i < rgb.length; i++) {
@@ -136,7 +195,8 @@ export class Controller {
                 this.colClass[i].value = rgb[i];
             }
         }
-        callback(this.setGradient());
+        this.posStr = pos.join(",");
+        this.setGradient();
     }
 
     setGradient() {
