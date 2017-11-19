@@ -4,14 +4,29 @@
 <head>
     <meta charset="utf-8">
     <style>
+       
         body {
             background-color: black;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            -webkit-user-select: none;
+            height: 100vh;
+            
         }
-        
-    
+        @media (orientation: portrait) {
+            #svgContent{
+                width: 100%;
+                position: relative;
+            }
+        }
+
+        @media (orientation: landscape) {
+
+            #svgContent{
+                max-height: 100%;
+                position: relative;
+                margin-left:10%;
+                margin-right: 10%; 
+
+            }
+        }
         
         .title {
             color: white;
@@ -27,7 +42,7 @@
 
 
 <body>
-    <svg version="1.1" viewBox="0 0 500 350">
+    <svg id="svgContent" version="1.1" viewBox="0 0 505 350">
             <defs id= "defCol">                
                 <radialGradient id="RadialGradient2">
                     <stop offset="0%" stop-color="yellow"/>
@@ -37,7 +52,7 @@
             <g  id ="svgTitle" transform="translate(2, 20)"></g>  
             <g  id ="ledDisplay" transform="translate(500, 40) rotate(90)"></g>           
             <g  id ="nativeDisplay" transform="translate(2, 330)"></g>       
-        </svg>
+    </svg>
     <form name="selector" class="text">
         <fieldset>
             <legend id>Rotate Color</legend>
