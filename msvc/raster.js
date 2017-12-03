@@ -12,21 +12,22 @@ export class Raster extends BinaryConverter{
         let ledArr = [];       
         let ledObj = {};
         let binConv = super.convert(binArr);
-        let ledNo = (binConv.length * binConv[0].length) - 1;
-
-        for (let i = binConv.length - 1; i >= 0; i--) {
+        let ledNo = 0;        
+        let colCnt = 6; 
+        for (let i = 0; i < binConv[0].length; i++) {                      
             ledArr[i] = [];
             let x = 0;
-            for (let j = 0; j < binConv[i].length; j++) {
+            for (let j = 0; j < binConv.length; j++) {
                 strategy.executeStrategy(ledObj = {
-                    onState: ((binConv[i][j] === "1") ? true : false), absX: x, absY: y, id: ledNo
+                    onState: ((binConv[j][i] === "1") ? true : false), absX: x, absY: y, id: ledNo, dec: colCnt
                 });
-                ledNo--;
+                ledNo++;                             
                 //next row
-                x += 35;
-            }
+                x += 85;
+            }            
             //next column
-            y += 85
+            colCnt--;
+            y += 35
         }
     }
 
