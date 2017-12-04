@@ -1,7 +1,7 @@
 export class SVGTextObj {
 
     svgText(text) {
-        let xDist = 0;
+        let xDist = 5;
         let unit = [text.hour, text.min, text.sec, text.day, text.month, text.year];
         let tspan = new Array(unit.length);
         let txt = document.createElementNS("http://www.w3.org/2000/svg", "text");

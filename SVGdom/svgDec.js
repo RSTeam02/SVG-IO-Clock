@@ -8,8 +8,8 @@ export class SVGDec extends Led{
         $(txt).attr("cursor", "pointer");
         $(txt).attr("transform", "translate(5,20)");
         $(txt).attr("id", ledObj.id);
-        $(txt).attr("x", ledObj.absX + 10);
-        $(txt).attr("y", ledObj.absY + 10);
+        $(txt).attr("x", ledObj.absX + 12);
+        $(txt).attr("y", ledObj.absY + 20);
         //$(txt).attr("style", "writing-mode: sideways-lr");
         $(txt).attr("font-family", "'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif");
         $(txt).attr("font-size", "24px");
