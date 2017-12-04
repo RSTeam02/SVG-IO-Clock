@@ -42,6 +42,7 @@ export class Controller {
             $("#red").val(this.setLS.loadSetting("ioClkSet").r);
             $("#green").val(this.setLS.loadSetting("ioClkSet").g);
             $("#blue").val(this.setLS.loadSetting("ioClkSet").b);
+            $('#display').prop('checked', this.setLS.loadSetting("ioClkSet").display);
             $('#shiftR').prop('checked', this.setLS.loadSetting("ioClkSet").checkR);
             $('#shiftG').prop('checked', this.setLS.loadSetting("ioClkSet").checkG);
             $('#shiftB').prop('checked', this.setLS.loadSetting("ioClkSet").checkB);
@@ -57,12 +58,13 @@ export class Controller {
         setInterval(() => {
             this.updateView();
             this.rgbRand();
+            $("#display").is(':checked')? $("#nativeDisplay").show(): $("#nativeDisplay").hide();
         }, 1000)
 
     }
 
     saveListener() {
-        $(".radioBtnShape, .radioBtnFormat, .shiftClass, .colClass").click(() => {
+        $("#display, .radioBtnShape, .radioBtnFormat, .shiftClass, .colClass").click(() => {
             this.setLS.saveSetting("ioClkSet", this.ioClkSet());
         });
     }
@@ -74,6 +76,7 @@ export class Controller {
                 this.selectStrategy();
             });
         }
+
     }
 
 
@@ -83,6 +86,7 @@ export class Controller {
             r: $("#red").val(),
             g: $("#green").val(),
             b: $("#blue").val(),
+            display: $("#display").is(':checked'),
             apm: $("input:radio[name='apm']:checked").attr("id"),
             checkR: $('#shiftR').is(':checked'),
             checkG: $('#shiftG').is(':checked'),

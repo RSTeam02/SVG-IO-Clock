@@ -1,8 +1,8 @@
 export class SVGTextObj {
 
     svgText(text) {
-        let xDist = [0, 70, 160, 240, 325, 410];
-        let unit = [`${text.hour}`, `:${text.min}`, `:${text.sec}`, ` ${text.day}`, `|${text.month}`, `|${text.year}`];
+        let xDist = 0;
+        let unit = [text.hour, text.min, text.sec, text.day, text.month, text.year];
         let tspan = new Array(unit.length);
         let txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
         $(txt).attr("id", "hmsdmy");
@@ -14,9 +14,10 @@ export class SVGTextObj {
             $(tspan[i]).attr("fill", "white");
             $(tspan[i]).attr("font-family", "Geneva, sans-serif");
             $(tspan[i]).attr("font-size", "54px");
-            $(tspan[i]).attr("x", xDist[i]);
+            $(tspan[i]).attr("x", xDist);         
             tspan[i].textContent = unit[i];
             $("#hmsdmy").append(tspan[i]);
+            xDist = xDist + 85;
         }
 
     }
